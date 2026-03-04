@@ -69,6 +69,10 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        .password-input {
+            letter-spacing: 0.5em;
+            text-align: center;
+        }
         .progress-bar {
             background: linear-gradient(90deg, #3b82f6 0%, #ef4444 100%);
         }
@@ -85,7 +89,26 @@
 </head>
 <body class="text-gray-800">
 
-    <div id="landingPage" class="min-h-screen flex items-center justify-center p-4">
+    <!-- Password Screen -->
+    <div id="passwordScreen" class="fixed inset-0 flex items-center justify-center z-50 bg-gradient-to-br from-white via-blue-50 to-red-50">
+        <div class="glass-panel p-8 rounded-2xl max-w-md w-full mx-4 text-center">
+            <div class="mb-6">
+                <div class="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-red-500 rounded-full flex items-center justify-center mb-4">
+                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold gradient-text mb-2">AKSES TERBATAS</h2>
+                <p class="text-gray-600">Masukkan password untuk melanjutkan</p>
+            </div>
+            <input type="password" id="passwordInput" class="password-input w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none text-lg mb-4" placeholder="••••••••••••••" maxlength="20">
+            <button onclick="checkPassword()" class="btn-primary w-full py-3 rounded-xl text-white font-semibold text-lg">MASUK</button>
+            <p id="passwordError" class="text-red-500 mt-3 hidden">Password salah!</p>
+        </div>
+    </div>
+
+    <!-- Landing Page -->
+    <div id="landingPage" class="hidden min-h-screen flex items-center justify-center p-4">
         <div class="glass-panel p-8 md:p-12 rounded-3xl max-w-2xl w-full text-center fade-in">
             <div class="mb-8">
                 <div class="inline-block p-4 rounded-full bg-gradient-to-br from-blue-100 to-red-100 mb-6">
@@ -120,8 +143,10 @@
         </div>
     </div>
 
+    <!-- Quiz Container -->
     <div id="quizContainer" class="hidden min-h-screen p-4 md:p-8">
         <div class="max-w-4xl mx-auto">
+            <!-- Header -->
             <div class="glass-panel p-4 rounded-2xl mb-6 flex justify-between items-center">
                 <div class="flex items-center gap-4">
                     <div class="text-sm font-semibold text-gray-600">Soal <span id="currentNum" class="text-blue-600 text-lg">1</span>/100</div>
@@ -135,12 +160,19 @@
                 </div>
             </div>
 
+            <!-- Question Card -->
             <div class="glass-panel p-6 md:p-8 rounded-2xl mb-6 fade-in">
                 <div class="mb-6">
                     <p class="text-gray-500 text-sm mb-2 font-semibold uppercase tracking-wide">Pilih bagian yang salah (A, B, C, atau D):</p>
                     <div id="questionText" class="text-lg md:text-xl leading-relaxed text-gray-800 font-medium"></div>
                 </div>
-                <div id="optionsContainer" class="space-y-3"></div>
+
+                <!-- Options -->
+                <div id="optionsContainer" class="space-y-3">
+                    <!-- Options will be inserted here -->
+                </div>
+
+                <!-- Explanation (Hidden initially) -->
                 <div id="explanationBox" class="hidden mt-6 p-6 rounded-xl explanation-box">
                     <div class="flex items-start gap-3">
                         <div class="flex-shrink-0">
@@ -156,11 +188,18 @@
                 </div>
             </div>
 
+            <!-- Navigation -->
             <div class="flex justify-between items-center">
                 <button onclick="prevQuestion()" id="prevBtn" class="px-6 py-3 rounded-xl bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition disabled:opacity-50 disabled:cursor-not-allowed">
                     ← Previous
                 </button>
-                <button onclick="showQuestionList()" class="px-4 py-3 rounded-xl bg-white border-2 border-gray-300 text-gray-600 font-semibold hover:border-blue-500 hover:text-blue-500 transition">📋</button>
+                
+                <div class="flex gap-2">
+                    <button onclick="showQuestionList()" class="px-4 py-3 rounded-xl bg-white border-2 border-gray-300 text-gray-600 font-semibold hover:border-blue-500 hover:text-blue-500 transition">
+                        📋
+                    </button>
+                </div>
+
                 <button onclick="nextQuestion()" id="nextBtn" class="px-6 py-3 rounded-xl bg-gray-200 text-gray-700 font-semibold hover:bg-gray-300 transition disabled:opacity-50 disabled:cursor-not-allowed">
                     Next →
                 </button>
@@ -168,12 +207,14 @@
         </div>
     </div>
 
+    <!-- Results Page -->
     <div id="resultsPage" class="hidden min-h-screen flex items-center justify-center p-4">
         <div class="glass-panel p-8 md:p-12 rounded-3xl max-w-2xl w-full text-center fade-in">
             <div id="resultIcon" class="mb-6 text-6xl">🎉</div>
             <h2 class="text-3xl font-bold gradient-text mb-4">Latihan Selesai!</h2>
             <div class="text-6xl font-bold mb-4" id="finalScore">0/100</div>
             <p id="resultMessage" class="text-xl text-gray-600 mb-8"></p>
+            
             <div class="grid grid-cols-2 gap-4 mb-8">
                 <div class="p-4 bg-green-50 rounded-xl">
                     <div class="text-2xl font-bold text-green-600" id="correctCount">0</div>
@@ -184,10 +225,14 @@
                     <div class="text-sm text-gray-600">Salah</div>
                 </div>
             </div>
-            <button onclick="restartQuiz()" class="btn-primary px-8 py-3 rounded-xl text-white font-semibold">Coba Lagi</button>
+
+            <button onclick="restartQuiz()" class="btn-primary px-8 py-3 rounded-xl text-white font-semibold">
+                Coba Lagi
+            </button>
         </div>
     </div>
 
+    <!-- Question List Modal -->
     <div id="questionListModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="glass-panel p-6 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4">
@@ -198,29 +243,670 @@
                     </svg>
                 </button>
             </div>
-            <div id="questionGrid" class="grid grid-cols-5 gap-2"></div>
+            <div id="questionGrid" class="grid grid-cols-5 gap-2">
+                <!-- Question numbers will be inserted here -->
+            </div>
         </div>
     </div>
 
     <script>
-        // DATA SOAL (Disalin dari file asli Anda)
+        // Password protection
+        const CORRECT_PASSWORD = "salvogroupclass";
+        
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            if (input === CORRECT_PASSWORD) {
+                document.getElementById('passwordScreen').classList.add('hidden');
+                document.getElementById('landingPage').classList.remove('hidden');
+                document.getElementById('landingPage').classList.add('fade-in');
+            } else {
+                document.getElementById('passwordError').classList.remove('hidden');
+                document.getElementById('passwordInput').classList.add('shake');
+                setTimeout(() => {
+                    document.getElementById('passwordInput').classList.remove('shake');
+                }, 500);
+            }
+        }
+
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        // Helper function to highlight words in text
+        function highlightText(text, wordsToHighlight) {
+            let result = text;
+            wordsToHighlight.forEach(word => {
+                // Escape special regex characters
+                const escapedWord = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(`\\b${escapedWord}\\b`, 'g');
+                result = result.replace(regex, `<span class="highlighted-word">${word}</span>`);
+            });
+            return result;
+        }
+
+        // Question Data - 100 High Quality TOEFL Error Recognition Questions
         const questions = [
+            // 1-10: Subject-Verb Agreement
             {
                 text: "The list of names are posted on the bulletin board for everyone to see.",
                 options: ["list", "are", "posted", "to see"],
                 correct: 1,
-                explanation: "Subjek kalimat adalah 'The list' (tunggal). Seharusnya menggunakan 'is' bukan 'are'."
+                explanation: "Subjek kalimat adalah 'The list' (tunggal), bukan 'names'. Kata 'of names' hanya merupakan prepositional phrase yang menjelaskan list. Seharusnya menggunakan 'is' (tunggal) bukan 'are' (jamak)."
             },
-            // ... (Seluruh 100 soal Anda tetap ada di sini)
+            {
+                text: "Every student and teacher were asked to attend the school meeting yesterday.",
+                options: ["Every", "were", "asked", "to attend"],
+                correct: 1,
+                explanation: "Ketika subjek dihubungkan oleh 'every', subjek dianggap tunggal meskipun ada dua noun. Seharusnya 'was asked' bukan 'were asked'."
+            },
+            {
+                text: "The number of applicants have increased significantly this year compared to last year.",
+                options: ["The number", "have increased", "significantly", "compared"],
+                correct: 1,
+                explanation: "'The number of' selalu diikuti kata benda jamak tetapi menggunakan verb tunggal karena yang menjadi fokus adalah 'number' (angka) itu sendiri. Seharusnya 'has increased'."
+            },
+            {
+                text: "Neither the teacher nor the students was ready for the difficult examination.",
+                options: ["Neither", "nor", "was ready", "for"],
+                correct: 2,
+                explanation: "Dalam struktur 'neither...nor', verb harus sesuai dengan subjek terdekat (proximity rule). Subjek terdekat adalah 'the students' (jamak), seharusnya 'were ready' bukan 'was ready'."
+            },
+            {
+                text: "Physics, as well as mathematics, require a great deal of practice to master.",
+                options: ["Physics", "as well as", "require", "to master"],
+                correct: 2,
+                explanation: "Ketika subjek diikuti 'as well as', verb harus sesuai dengan subjek utama pertama. 'Physics' adalah singular (nama ilmu pengetahuan dianggap tunggal), seharusnya 'requires'."
+            },
+            {
+                text: "The committee are divided in their opinion regarding the new policy implementation.",
+                options: ["The committee", "are divided", "in their opinion", "regarding"],
+                correct: 1,
+                explanation: "Kata kolektif seperti 'committee' bisa tunggal atau jamak tergantung konteks. Di sini, 'in their opinion' menunjukkan anggota komite memiliki pendapat berbeda-beda (plural sense), sehingga 'are' sebenarnya bisa diterima, tetapi dalam konteks TOEFL formal yang mengutamakan konsistensi, 'is divided' lebih standar. Error sebenarnya adalah ketidakkonsistenan: jika menggunakan 'are', seharusnya 'their opinions' (jamak), bukan 'their opinion'."
+            },
+            {
+                text: "One of the students who is sitting in the front row forgot to bring their textbook.",
+                options: ["One", "is", "forgot", "their"],
+                correct: 1,
+                explanation: "Dalam relative clause 'who is sitting', 'who' merujuk pada 'students' (kata benda sebelumnya yang jamak), bukan 'One'. Seharusnya 'who are sitting'."
+            },
+            {
+                text: "The pair of shoes look very expensive because they are made of genuine leather.",
+                options: ["The pair", "look", "very expensive", "are made"],
+                correct: 1,
+                explanation: "'Pair' adalah subjek tunggal meskipun merujuk pada dua sepatu. Seharusnya 'looks' bukan 'look'."
+            },
+            {
+                text: "Not only the manager but also the employees was surprised by the sudden announcement.",
+                options: ["Not only", "but also", "was surprised", "by"],
+                correct: 2,
+                explanation: "Dalam 'not only...but also', verb mengikuti subjek terdekat. 'Employees' adalah jamak, seharusnya 'were surprised'."
+            },
+            {
+                text: "Fifty dollars seem like a reasonable price for this high-quality jacket.",
+                options: ["Fifty dollars", "seem", "like", "for"],
+                correct: 1,
+                explanation: "Jumlah uang, waktu, atau jarak dianggap sebagai satu kesatuan (singular). Seharusnya 'seems' bukan 'seem'."
+            },
+
+            // 11-20: Verb Tenses
+            {
+                text: "By the time we arrived at the station, the train already left five minutes ago.",
+                options: ["By the time", "arrived", "already left", "ago"],
+                correct: 2,
+                explanation: "Untuk action yang terjadi sebelum action lampau lainnya, gunakan Past Perfect (had + V3). Seharusnya 'had already left'."
+            },
+            {
+                text: "She is working in this company since she graduated from university in 2019.",
+                options: ["is working", "in", "graduated", "in 2019"],
+                correct: 0,
+                explanation: "Kata 'since' menunjukkan action dimulai di masa lalu dan berlanjut sampai sekarang. Gunakan Present Perfect Continuous: 'has been working'."
+            },
+            {
+                text: "I will call you as soon as I will arrive at the airport tomorrow morning.",
+                options: ["will call", "as soon as", "will arrive", "tomorrow"],
+                correct: 2,
+                explanation: "Dalam time clause (as soon as, when, before, after), gunakan Simple Present untuk menyatakan masa depan, bukan 'will'. Seharusnya 'arrive'."
+            },
+            {
+                text: "While he was walking home yesterday, it was starting to rain heavily.",
+                options: ["While", "was walking", "was starting", "to rain"],
+                correct: 2,
+                explanation: "Action pendek (hujan mulai) yang menginterupsi action panjang (berjalan) menggunakan Simple Past, bukan Past Continuous. Seharusnya 'started'."
+            },
+            {
+                text: "They have been waiting for the bus for two hours when it finally arrived.",
+                options: ["have been waiting", "for", "when", "arrived"],
+                correct: 0,
+                explanation: "Action yang terjadi sebelum action lampau lainnya menggunakan Past Perfect Continuous. Seharusnya 'had been waiting'."
+            },
+            {
+                text: "The movie will have been starting by the time we get to the cinema tonight.",
+                options: ["will have been starting", "by the time", "get", "tonight"],
+                correct: 0,
+                explanation: "Future Perfect menggunakan bentuk 'will have + V3', bukan continuous form untuk action sederhana. Seharusnya 'will have started'."
+            },
+            {
+                text: "She has visited Paris three years ago during her summer vacation.",
+                options: ["has visited", "three years ago", "during", "vacation"],
+                correct: 0,
+                explanation: "Keterangan waktu spesifik di masa lalu ('three years ago') tidak boleh digunakan dengan Present Perfect. Gunakan Simple Past: 'visited'."
+            },
+            {
+                text: "My brother has been finishing his homework before he went to bed last night.",
+                options: ["has been finishing", "before", "went", "last night"],
+                correct: 0,
+                explanation: "Action yang selesai sebelum action lampau lainnya menggunakan Past Perfect (had finished), bukan Present Perfect Continuous."
+            },
+            {
+                text: "The company is building a new factory in this area next year to expand their production.",
+                options: ["is building", "in", "next year", "to expand"],
+                correct: 0,
+                explanation: "Untuk rencana masa depan yang sudah ditetapkan, gunakan 'will build' atau 'is going to build'. Present Continuous untuk future hanya untuk arrangement yang sudah fix dengan waktu spesifik. 'Is building' kurang tepat tanpa konteks arrangement jelas."
+            },
+            {
+                text: "I am knowing the answer to that difficult question, so I will raise my hand.",
+                options: ["am knowing", "the answer", "to", "raise"],
+                correct: 0,
+                explanation: "Verb 'know' adalah stative verb (keadaan mental) yang tidak menggunakan continuous form. Seharusnya 'know'."
+            },
+
+            // 21-30: Parallel Structure
+            {
+                text: "The new employee is intelligent, hardworking, and has dedication to his job.",
+                options: ["intelligent", "hardworking", "has dedication", "to his job"],
+                correct: 2,
+                explanation: "Dalam daftar sifat (adjectives), gunakan bentuk yang paralel. 'Intelligent' dan 'hardworking' adalah adjective, seharusnya 'dedicated' bukan 'has dedication'."
+            },
+            {
+                text: "Tourists come to this city to enjoy the beautiful beaches, eating local food, and visit historical sites.",
+                options: ["enjoy", "eating", "visit", "sites"],
+                correct: 1,
+                explanation: "Dalam daftar infinitive (to enjoy, to visit), gunakan bentuk dasar verb yang konsisten. Seharusnya 'eat' bukan 'eating' agar paralel dengan 'enjoy' dan 'visit'."
+            },
+            {
+                text: "The manager asked his staff to finish the report quickly, accurately, and with thorough analysis.",
+                options: ["finish", "quickly", "accurately", "with thorough analysis"],
+                correct: 3,
+                explanation: "Dalam daftar adverb, gunakan bentuk yang konsisten. 'Quickly' dan 'accurately' adalah adverb, seharusnya 'thoroughly' bukan 'with thorough analysis'."
+            },
+            {
+                text: "She likes neither to swim nor jogging in the morning because she prefers indoor activities.",
+                options: ["to swim", "nor", "jogging", "prefers"],
+                correct: 2,
+                explanation: "Dalam struktur 'neither...nor', gunakan bentuk yang paralel. 'To swim' (infinitive) harus dipasangkan dengan 'to jog', atau 'swimming' dengan 'jogging'. Seharusnya 'to jog' atau 'swimming'."
+            },
+            {
+                text: "The president promised to reduce taxes, improving education, and create more jobs.",
+                options: ["reduce", "improving", "create", "jobs"],
+                correct: 1,
+                explanation: "Dalam daftar infinitive (to reduce, to create), gunakan bentuk yang sama. Seharusnya 'improve' bukan 'improving'."
+            },
+            {
+                text: "Success requires not only talent but also working hard consistently every day.",
+                options: ["requires", "talent", "but also working", "consistently"],
+                correct: 2,
+                explanation: "'Not only' diikuti noun 'talent', maka 'but also' harus diikuti noun juga. Seharusnya 'hard work' bukan 'working hard'."
+            },
+            {
+                text: "The conference will address issues such as climate change, economic development, and how to improve public health.",
+                options: ["climate change", "economic development", "how to improve", "public health"],
+                correct: 2,
+                explanation: "Dalam daftar noun phrases, gunakan bentuk noun. 'Climate change' dan 'economic development' adalah noun phrases, seharusnya 'public health improvement' atau 'improving public health' (gerund sebagai noun), bukan 'how to improve' (clause)."
+            },
+            {
+                text: "The job involves answering phone calls, schedules appointments, and greeting clients.",
+                options: ["answering", "schedules appointments", "and", "greeting"],
+                correct: 1,
+                explanation: "Dalam daftar gerund (answering, greeting), gunakan gerund juga. Seharusnya 'scheduling appointments' bukan 'schedules appointments'."
+            },
+            {
+                text: "He is famous not for his wealth but because he is generous to people in need.",
+                options: ["for", "his wealth", "but because he is generous", "to people"],
+                correct: 2,
+                explanation: "Dalam struktur 'not...but', gunakan prepositional phrase yang paralel. 'For his wealth' harus dipasangkan dengan 'for his generosity', bukan 'because he is generous' (clause)."
+            },
+            {
+                text: "The research paper was poorly organized, containing many errors, and submitted late.",
+                options: ["poorly organized", "containing", "many errors", "submitted"],
+                correct: 1,
+                explanation: "Dalam daftar adjective/participle (poorly organized, submitted late), gunakan bentuk yang konsisten. Seharusnya 'contained' (passive) atau 'full of' agar paralel dengan 'poorly organized'."
+            },
+
+            // 31-40: Word Forms (Noun/Verb/Adjective/Adverb)
+            {
+                text: "The improve in technology has changed the way we communicate with each other.",
+                options: ["improve", "in", "has changed", "communicate"],
+                correct: 0,
+                explanation: "Setelah article 'the', gunakan noun. Seharusnya 'improvement' bukan 'improve' (verb)."
+            },
+            {
+                text: "She performed excellent in the mathematics competition and won first prize.",
+                options: ["performed", "excellent", "in", "won"],
+                correct: 1,
+                explanation: "Kata yang menjelaskan verb 'performed' harus berupa adverb. Seharusnya 'excellently' bukan 'excellent' (adjective)."
+            },
+            {
+                text: "The decide to close the factory was made after careful consideration of all factors.",
+                options: ["decide", "to close", "was made", "consideration"],
+                correct: 0,
+                explanation: "Setelah article 'the', gunakan noun. Seharusnya 'decision' bukan 'decide' (verb)."
+            },
+            {
+                text: "The medicine works effect against headaches but may cause drowsiness.",
+                options: ["works", "effect", "against", "may cause"],
+                correct: 1,
+                explanation: "Kata yang menjelaskan verb 'works' harus berupa adverb. Seharusnya 'effectively' bukan 'effect' (noun)."
+            },
+            {
+                text: "There has been a significant grow in the number of online shoppers this year.",
+                options: ["significant", "grow", "in", "shoppers"],
+                correct: 1,
+                explanation: "Setelah adjective 'significant', gunakan noun. Seharusnya 'growth' bukan 'grow' (verb)."
+            },
+            {
+                text: "The argue between the two departments lasted for three hours without any resolution.",
+                options: ["argue", "between", "lasted", "resolution"],
+                correct: 0,
+                explanation: "Setelah article 'the', gunakan noun. Seharusnya 'argument' bukan 'argue' (verb)."
+            },
+            {
+                text: "He spoke very soft because he did not want to wake the sleeping baby.",
+                options: ["spoke", "soft", "because", "wake"],
+                correct: 1,
+                explanation: "Kata yang menjelaskan verb 'spoke' harus berupa adverb. Seharusnya 'softly' bukan 'soft' (adjective)."
+            },
+            {
+                text: "The explain provided by the teacher helped the students understand the difficult concept.",
+                options: ["explain", "provided", "helped", "understand"],
+                correct: 0,
+                explanation: "Setelah article 'the', gunakan noun. Seharusnya 'explanation' bukan 'explain' (verb)."
+            },
+            {
+                text: "The children played happy in the garden while their parents watched them.",
+                options: ["played", "happy", "in", "watched"],
+                correct: 1,
+                explanation: "Kata yang menjelaskan verb 'played' harus berupa adverb. Seharusnya 'happily' bukan 'happy' (adjective)."
+            },
+            {
+                text: "The develop of new software requires a lot of time and financial resources.",
+                options: ["develop", "of", "requires", "resources"],
+                correct: 0,
+                explanation: "Setelah article 'the', gunakan noun. Seharusnya 'development' bukan 'develop' (verb)."
+            },
+
+            // 41-50: Prepositions & Articles
+            {
+                text: "She is interested with learning foreign languages, especially French and German.",
+                options: ["interested", "with", "learning", "especially"],
+                correct: 1,
+                explanation: "Collocation yang benar adalah 'interested in', bukan 'interested with'."
+            },
+            {
+                text: "The meeting will be held in Monday morning at the main conference room.",
+                options: ["held", "in", "morning", "at"],
+                correct: 1,
+                explanation: "Untuk hari (Monday, Tuesday), gunakan preposition 'on', bukan 'in'. 'In' digunakan untuk bulan atau tahun."
+            },
+            {
+                text: "He arrived to the airport two hours before his international flight departure.",
+                options: ["arrived", "to", "before", "departure"],
+                correct: 1,
+                explanation: "Collocation yang benar adalah 'arrive at' untuk tempat spesifik (airport, station), atau 'arrive in' untuk kota/negara. 'Arrive to' adalah salah."
+            },
+            {
+                text: "The book consists from ten chapters covering various aspects of psychology.",
+                options: ["consists", "from", "ten chapters", "covering"],
+                correct: 1,
+                explanation: "Collocation yang benar adalah 'consist of', bukan 'consist from'."
+            },
+            {
+                text: "She is married with a famous actor who has won several international awards.",
+                options: ["married", "with", "actor", "has won"],
+                correct: 1,
+                explanation: "Collocation yang benar adalah 'married to', bukan 'married with'."
+            },
+            {
+                text: "The students are preparing to the final examination that will be held next month.",
+                options: ["preparing", "to", "final", "held"],
+                correct: 1,
+                explanation: "Collocation yang benar adalah 'prepare for', bukan 'prepare to'. 'Prepare to' diikuti verb (prepare to do something)."
+            },
+            {
+                text: "I prefer tea than coffee because it contains less caffeine and is healthier.",
+                options: ["prefer", "than", "because", "contains"],
+                correct: 1,
+                explanation: "Setelah 'prefer', gunakan 'to' (prefer X to Y), bukan 'than'. 'Than' digunakan setelah 'rather than' atau comparative."
+            },
+            {
+                text: "The accident resulted from the death of three passengers and the driver.",
+                options: ["resulted", "from", "death", "passengers"],
+                correct: 1,
+                explanation: "'Result from' berarti disebabkan oleh. 'Result in' berarti mengakibatkan. Konteks ini menyatakan akibat (death), seharusnya 'resulted in'."
+            },
+            {
+                text: "He is responsible in completing the project on time and within budget.",
+                options: ["responsible", "in", "completing", "within"],
+                correct: 1,
+                explanation: "Collocation yang benar adalah 'responsible for', bukan 'responsible in'."
+            },
+            {
+                text: "The gift was intended for give to the retiring manager as a token of appreciation.",
+                options: ["intended", "for", "give", "retiring"],
+                correct: 1,
+                explanation: "'Intended for' diikuti noun/pronoun. Jika diikuti verb, gunakan 'intended to' (infinitive). Seharusnya 'to give' bukan 'for give'."
+            },
+
+            // 51-60: Pronouns
+            {
+                text: "Between you and I, this is not the best solution to the current problem.",
+                options: ["Between", "I", "is", "to"],
+                correct: 1,
+                explanation: "Setelah preposition 'between', gunakan object pronoun. Seharusnya 'me' bukan 'I' (subject pronoun)."
+            },
+            {
+                text: "Each student must bring their own calculator to the mathematics examination.",
+                options: ["Each", "must bring", "their", "own"],
+                correct: 2,
+                explanation: "'Each' adalah singular, seharusnya menggunakan 'his or her' (formal) atau 'his/her'. Dalam konteks TOEFL formal, 'their' dianggap salah untuk singular antecedent."
+            },
+            {
+                text: "The manager told to his employees that they would receive a bonus this month.",
+                options: ["told", "to", "employees", "receive"],
+                correct: 1,
+                explanation: "'Tell' adalah transitive verb yang langsung diikuti object (tell someone), tidak perlu preposition 'to'. Seharusnya 'told his employees'."
+            },
+            {
+                text: "The books on the shelf are her's, not mine or yours.",
+                options: ["on", "are", "her's", "mine"],
+                correct: 2,
+                explanation: "Possessive pronoun tidak menggunakan apostrophe. Seharusnya 'hers' bukan 'her's'."
+            },
+            {
+                text: "Everyone who wants to participate in the competition must submit their application before Friday.",
+                options: ["Everyone", "wants", "their", "before"],
+                correct: 2,
+                explanation: "'Everyone' adalah singular indefinite pronoun. Dalam konteks TOEFL formal, gunakan 'his or her' bukan 'their'."
+            },
+            {
+                text: "The success of the team depends on ourselves working together effectively.",
+                options: ["success", "depends", "ourselves", "working"],
+                correct: 2,
+                explanation: "Setelah preposition 'on', gunakan object pronoun 'us' + gerund 'working', atau gunakan possessive adjective 'our'. 'Ourselves' (reflexive) tidak tepat di sini. Seharusnya 'us' atau 'our'."
+            },
+            {
+                text: "Whom wrote this beautiful poem that is displayed on the classroom wall?",
+                options: ["Whom", "wrote", "that", "displayed"],
+                correct: 0,
+                explanation: "'Whom' adalah object pronoun. Di sini dibutuhkan subject pronoun untuk verb 'wrote'. Seharusnya 'Who'."
+            },
+            {
+                text: "The company gave to its employees a generous bonus at the end of the year.",
+                options: ["gave", "to", "its", "at"],
+                correct: 1,
+                explanation: "'Give' menggunakan struktur 'give someone something' (double object) atau 'give something to someone'. Jika indirect object (employees) langsung mengikuti verb, tidak perlu 'to'. Seharusnya 'gave its employees'."
+            },
+            {
+                text: "My friend and me are planning to visit Japan next summer vacation.",
+                options: ["friend", "me", "are planning", "to visit"],
+                correct: 1,
+                explanation: "Sebagai subject dari kalimat, gunakan subject pronoun. Seharusnya 'I' bukan 'me'."
+            },
+            {
+                text: "The teacher asked that did not finish their homework to stay after class.",
+                options: ["asked", "that", "did not finish", "to stay"],
+                correct: 1,
+                explanation: "'That' tidak dapat digunakan sebagai pronoun untuk orang. Seharusnya 'those who' (mereka yang) atau 'the students who'."
+            },
+
+            // 61-70: Comparatives & Superlatives
+            {
+                text: "This is the more interesting book I have ever read in my entire life.",
+                options: ["the", "more", "interesting", "have ever read"],
+                correct: 1,
+                explanation: "Untuk superlative degree (yang paling) dalam kelompok tidak terbatas ('ever read'), gunakan 'most', bukan 'more' (comparative)."
+            },
+            {
+                text: "She is more taller than her younger sister who just started high school.",
+                options: ["is", "more taller", "than", "started"],
+                correct: 1,
+                explanation: "'Taller' sudah merupakan bentuk comparative, tidak perlu ditambah 'more'. Seharusnya 'much taller' atau hanya 'taller'."
+            },
+            {
+                text: "The weather today is more better than yesterday, so we should go hiking.",
+                options: ["weather", "more better", "than", "go"],
+                correct: 1,
+                explanation: "'Better' sudah merupakan bentuk comparative (good -> better -> best), tidak perlu ditambah 'more'. Seharusnya hanya 'better'."
+            },
+            {
+                text: "This machine is more efficient than any machines in the old factory.",
+                options: ["more", "efficient", "than", "machines"],
+                correct: 3,
+                explanation: "Dalam comparative dengan 'any', gunakan singular noun karena perbandingan adalah satu per satu. Seharusnya 'any machine' atau 'any other machine'."
+            },
+            {
+                text: "He is the most unique person I have ever met in my professional career.",
+                options: ["the", "most unique", "person", "met"],
+                correct: 1,
+                explanation: "'Unique' adalah absolute adjective (sesuatu yang unik tidak bisa lebih unik lagi), tidak menggunakan comparative atau superlative. Seharusnya hanya 'unique'."
+            },
+            {
+                text: "The more you practice speaking English, the more fluently you will become.",
+                options: ["more", "practice", "fluently", "become"],
+                correct: 2,
+                explanation: "Setelah linking verb 'become', gunakan adjective bukan adverb. Seharusnya 'fluent' bukan 'fluently'."
+            },
+            {
+                text: "This road is longer and more dangerous than any road in this province.",
+                options: ["longer", "more", "than", "road"],
+                correct: 3,
+                explanation: "Dalam comparative dengan 'any', gunakan singular noun. Seharusnya 'any other road' (tambahkan 'other' karena road ini termasuk dalam provinsi tersebut)."
+            },
+            {
+                text: "She is one of the intelligentest students who have ever studied at this university.",
+                options: ["one", "intelligentest", "who", "studied"],
+                correct: 1,
+                explanation: "Kata sifat panjang (intelligent) menggunakan 'most' untuk superlative, bukan suffix '-est'. Seharusnya 'most intelligent'."
+            },
+            {
+                text: "The less people attend the meeting, the better it will be for us to make decisions quickly.",
+                options: ["less", "attend", "better", "make"],
+                correct: 0,
+                explanation: "'People' adalah countable noun (bisa dihitung), gunakan 'fewer' bukan 'less'. 'Less' hanya untuk uncountable nouns."
+            },
+            {
+                text: "This is the most perfect score I have ever achieved in any examination.",
+                options: ["the", "most", "perfect", "achieved"],
+                correct: 1,
+                explanation: "'Perfect' adalah absolute adjective (tidak bisa lebih sempurna), tidak menggunakan 'most'. Seharusnya hanya 'perfect'."
+            },
+
+            // 71-80: Conditionals & Subjunctive
+            {
+                text: "If I would have known about the traffic jam, I would have taken the train instead.",
+                options: ["If", "would have", "known", "would have taken"],
+                correct: 1,
+                explanation: "Dalam Third Conditional (if + past perfect), gunakan 'had + V3' di klausa if, bukan 'would have'. Seharusnya 'had known'."
+            },
+            {
+                text: "If he studies harder last semester, he would have passed the difficult examination.",
+                options: ["If", "studies", "harder", "would have passed"],
+                correct: 1,
+                explanation: "Dalam Third Conditional, gunakan Past Perfect di klausa if. Seharusnya 'had studied' bukan 'studies' (simple present)."
+            },
+            {
+                text: "I wish I am taller so that I could reach the top shelf without using a ladder.",
+                options: ["wish", "am", "so that", "using"],
+                correct: 1,
+                explanation: "Setelah 'wish' untuk situasi yang tidak mungkin saat ini, gunakan Past Tense (subjunctive). Seharusnya 'were' bukan 'am'."
+            },
+            {
+                text: "It is important that he is present at the meeting tomorrow morning.",
+                options: ["is", "important", "present", "tomorrow"],
+                correct: 0,
+                explanation: "Setelah 'It is important that', gunakan subjunctive mood: 'be' (tanpa perubahan bentuk). Seharusnya 'be present' bukan 'is present'."
+            },
+            {
+                text: "If I were rich, I will buy a big house for my parents in the countryside.",
+                options: ["were", "rich", "will", "buy"],
+                correct: 2,
+                explanation: "Dalam Second Conditional (If + simple past), gunakan 'would + V1' di main clause, bukan 'will'. Seharusnya 'would buy'."
+            },
+            {
+                text: "She suggested that he goes to the doctor immediately to check his condition.",
+                options: ["suggested", "goes", "to the doctor", "to check"],
+                correct: 1,
+                explanation: "Setelah 'suggest', 'demand', 'require', gunakan subjunctive: 'go' (bentuk dasar), bukan 'goes'."
+            },
+            {
+                text: "I would rather you tell me the truth about what happened yesterday.",
+                options: ["would rather", "tell", "me", "happened"],
+                correct: 1,
+                explanation: "Setelah 'would rather', gunakan Past Tense untuk subjunctive. Seharusnya 'told' bukan 'tell'."
+            },
+            {
+                text: "If it rains tomorrow, we would cancel the outdoor picnic and stay home.",
+                options: ["rains", "tomorrow", "would cancel", "stay"],
+                correct: 2,
+                explanation: "Dalam First Conditional (If + simple present), gunakan 'will' di main clause, bukan 'would'. Seharusnya 'will cancel'."
+            },
+            {
+                text: "It is essential that every applicant submits the required documents before the deadline.",
+                options: ["is", "submits", "required", "before"],
+                correct: 1,
+                explanation: "Setelah 'It is essential that', gunakan subjunctive 'submit' (bentuk dasar), bukan 'submits'."
+            },
+            {
+                text: "Had I known about the problem earlier, I would try to solve it immediately.",
+                options: ["Had", "known", "would try", "solve"],
+                correct: 2,
+                explanation: "Inverted conditional (Had I known = If I had known) adalah Third Conditional, seharusnya menggunakan 'would have tried' bukan 'would try'."
+            },
+
+            // 81-90: Adjective/Adverb Clauses & Phrases
+            {
+                text: "The man which is standing at the door is my uncle who lives in Australia.",
+                options: ["which", "is standing", "is", "who"],
+                correct: 0,
+                explanation: "Untuk orang, gunakan 'who' atau 'that', bukan 'which' (which untuk benda)."
+            },
+            {
+                text: "The book what I bought yesterday is very interesting and informative.",
+                options: ["what", "bought", "is", "informative"],
+                correct: 0,
+                explanation: "'What' tidak digunakan sebagai relative pronoun setelah noun. Gunakan 'which' atau 'that' untuk benda, atau 'who' untuk orang."
+            },
+            {
+                text: "The reason why he failed the exam is because he did not study seriously.",
+                options: ["why", "failed", "because", "study"],
+                correct: 2,
+                explanation: "Setelah 'The reason...is', gunakan 'that' atau langsung clause tanpa conjunction, bukan 'because'. 'The reason...is because' adalah redundant (tautology)."
+            },
+            {
+                text: "The house where we visited last summer has been sold to a new owner.",
+                options: ["where", "visited", "has been sold", "to"],
+                correct: 0,
+                explanation: "'Where' adalah adverb of place yang tidak bisa menjadi object. Gunakan 'which' atau 'that' karena 'visited' membutuhkan object, atau hapus 'where' jika ingin menggunakan 'which'."
+            },
+            {
+                text: "Such a complicated problem that is difficult to solve requires expert assistance.",
+                options: ["Such", "that", "to solve", "requires"],
+                correct: 1,
+                explanation: "Struktur 'such...that' untuk result clause. Error di sini adalah 'that' yang seharusnya 'as' untuk adjective clause (modifikasi 'problem'). 'Such...as' untuk contoh, 'such...that' untuk hasil. Kalimat ini memodifikasi problem, seharusnya 'as'."
+            },
+            {
+                text: "The students who cheating on the exam were given a severe punishment by the teacher.",
+                options: ["who", "cheating", "were given", "by"],
+                correct: 1,
+                explanation: "Relative clause membutuhkan verb. 'Cheating' adalah participle, seharusnya 'cheated' (simple past) atau 'were cheating' (past continuous sebagai verb)."
+            },
+            {
+                text: "The town where I grew up in is very small and peaceful compared to big cities.",
+                options: ["where", "grew up", "in", "compared"],
+                correct: 0,
+                explanation: "'Where' sudah mencakup makna 'in which', sehingga tidak perlu preposition 'in' lagi. Seharusnya 'which I grew up in' atau 'where I grew up' (tanpa in)."
+            },
+            {
+                text: "He is the only one of the students who have passed the difficult certification exam.",
+                options: ["only", "who", "have", "passed"],
+                correct: 2,
+                explanation: "'The only one' adalah singular antecedent, seharusnya 'has passed' bukan 'have passed'."
+            },
+            {
+                text: "The cake baking in the oven smells delicious and makes everyone hungry.",
+                options: ["baking", "in", "smells", "makes"],
+                correct: 0,
+                explanation: "Participle phrase sebagai adjective. 'Baking' adalah active participle, tapi cake tidak bisa mem-bake dirinya sendiri. Gunakan passive participle 'being baked' atau 'baked'."
+            },
+            {
+                text: "The letter which it was sent yesterday arrived this morning by express mail.",
+                options: ["which", "it", "was sent", "arrived"],
+                correct: 1,
+                explanation: "Relative pronoun 'which' sudah menjadi subject, tidak perlu pronoun 'it' lagi. Seharusnya hapus 'it'."
+            },
+
+            // 91-100: Miscellaneous & Mixed
+            {
+                text: "Despite of the heavy rain, the construction workers continued their job outside.",
+                options: ["Despite of", "the", "continued", "outside"],
+                correct: 0,
+                explanation: "'Despite' adalah preposition yang langsung diikuti noun, tidak perlu 'of'. 'In spite of' memerlukan 'of', tapi 'despite' tidak."
+            },
+            {
+                text: "In spite the bad weather, the outdoor concert continued as scheduled last night.",
+                options: ["In spite", "the", "continued", "as"],
+                correct: 1,
+                explanation: "'In spite' harus diikuti 'of' (in spite of). Seharusnya 'of the' bukan hanya 'the'."
+            },
+            {
+                text: "The two sisters are very different with each other in terms of personality and hobbies.",
+                options: ["are", "with", "each other", "terms"],
+                correct: 1,
+                explanation: "Collocation yang benar adalah 'different from', bukan 'different with'."
+            },
+            {
+                text: "According to the weather forecast, it is supposed to raining all day tomorrow.",
+                options: ["According to", "the", "supposed", "raining"],
+                correct: 3,
+                explanation: "'Be supposed to' diikuti bentuk dasar verb (rain), bukan 'raining'. Seharusnya 'rain'."
+            },
+            {
+                text: "The manager had his secretary to make copies of the important documents immediately.",
+                options: ["had", "to make", "copies", "immediately"],
+                correct: 1,
+                explanation: "Causative 'have' menggunakan struktur 'have + someone + V1 (bare infinitive)', bukan 'to make'. Seharusnya 'make'."
+            },
+            {
+                text: "We made our children to finish their homework before watching television last night.",
+                options: ["made", "to finish", "before", "watching"],
+                correct: 1,
+                explanation: "Causative 'make' menggunakan 'make + someone + V1', bukan 'to finish'. Seharusnya 'finish'."
+            },
+            {
+                text: "Let me to help you with those heavy bags that look very difficult to carry.",
+                options: ["Let", "to help", "with", "look"],
+                correct: 1,
+                explanation: "'Let' diikuti bare infinitive (help), bukan 'to help'. Seharusnya 'help'."
+            },
+            {
+                text: "I heard her sings beautifully in the bathroom when I walked past her room.",
+                options: ["heard", "sings", "beautifully", "walked"],
+                correct: 1,
+                explanation: "'Hear' (perception verb) diikuti bare infinitive atau present participle untuk action yang sedang berlangsung. Seharusnya 'sing' atau 'singing', bukan 'sings'."
+            },
+            {
+                text: "The teacher watched the students to cheat during the examination and reported them.",
+                options: ["watched", "to cheat", "during", "reported"],
+                correct: 1,
+                explanation: "'Watch' (perception verb) diikuti bare infinitive atau present participle. Seharusnya 'cheat' atau 'cheating', bukan 'to cheat'."
+            },
             {
                 text: "Please stop to make so much noise because I am trying to concentrate on my work.",
                 options: ["stop", "to make", "because", "trying"],
                 correct: 1,
-                explanation: "'Stop + gerund' digunakan untuk berhenti melakukan sesuatu. Seharusnya 'making' bukan 'to make'."
+                explanation: "'Stop + gerund' berhenti melakukan sesuatu. 'Stop + to infinitive' berhenti untuk melakukan sesuatu yang lain. Konteks ini ingin menghentikan kebisingan, seharusnya 'making' bukan 'to make'."
             }
         ];
 
-        // LOGIC KUIS (Telah dimodifikasi tanpa fungsi checkPassword)
         let currentQuestion = 0;
         let score = 0;
         let answered = new Array(questions.length).fill(false);
@@ -236,53 +922,95 @@
             const q = questions[currentQuestion];
             document.getElementById('currentNum').textContent = currentQuestion + 1;
             document.getElementById('progressBar').style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
-            document.getElementById('questionText').innerHTML = q.text; // Sederhana tanpa highlight berlebih agar stabil
+            
+            // Highlight words that appear in options
+            const highlightedText = highlightText(q.text, q.options);
+            document.getElementById('questionText').innerHTML = highlightedText;
             
             const optionsContainer = document.getElementById('optionsContainer');
             optionsContainer.innerHTML = '';
+            
             const labels = ['A', 'B', 'C', 'D'];
-
             q.options.forEach((opt, idx) => {
                 const btn = document.createElement('button');
                 btn.className = `option-card w-full p-4 rounded-xl text-left font-medium flex items-center gap-3 ${userAnswers[currentQuestion] === idx ? 'selected' : ''}`;
                 if (answered[currentQuestion]) {
-                    if (idx === q.correct) btn.classList.add('correct');
-                    else if (userAnswers[currentQuestion] === idx) btn.classList.add('wrong');
+                    if (idx === q.correct) {
+                        btn.classList.add('correct');
+                    } else if (userAnswers[currentQuestion] === idx && idx !== q.correct) {
+                        btn.classList.add('wrong');
+                    }
                 }
-                btn.innerHTML = `<span class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold text-sm">${labels[idx]}</span><span>${opt}</span>`;
+                btn.innerHTML = `<span class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold text-sm ${userAnswers[currentQuestion] === idx ? 'bg-blue-500 text-white' : ''}">${labels[idx]}</span><span>${opt}</span>`;
                 btn.onclick = () => selectOption(idx);
                 optionsContainer.appendChild(btn);
             });
 
             document.getElementById('explanationBox').classList.add('hidden');
-            if (answered[currentQuestion]) showExplanation();
+            if (answered[currentQuestion]) {
+                showExplanation();
+            }
+
             document.getElementById('prevBtn').disabled = currentQuestion === 0;
             document.getElementById('nextBtn').textContent = currentQuestion === questions.length - 1 ? 'Selesai' : 'Next →';
         }
 
         function selectOption(idx) {
             if (answered[currentQuestion]) return;
+            
             userAnswers[currentQuestion] = idx;
             answered[currentQuestion] = true;
-            if (idx === questions[currentQuestion].correct) {
+            
+            const q = questions[currentQuestion];
+            const options = document.querySelectorAll('.option-card');
+            const labels = ['A', 'B', 'C', 'D'];
+            
+            if (idx === q.correct) {
                 score++;
-                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                document.getElementById('scoreDisplay').textContent = `${score}/${questions.length}`;
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#3b82f6', '#ef4444', '#10b981', '#f59e0b']
+                });
+                options[idx].classList.add('correct');
+            } else {
+                options[idx].classList.add('wrong');
+                options[idx].classList.add('shake');
+                options[q.correct].classList.add('correct');
+                
+                // Error effect
+                document.body.style.background = 'linear-gradient(135deg, #fee2e2 0%, #fecaca 50%, #fecaca 100%)';
+                setTimeout(() => {
+                    document.body.style.background = '';
+                }, 500);
             }
-            document.getElementById('scoreDisplay').textContent = `${score}/${questions.length}`;
-            loadQuestion();
+            
+            showExplanation();
         }
 
         function showExplanation() {
-            document.getElementById('explanationText').textContent = questions[currentQuestion].explanation;
+            const q = questions[currentQuestion];
+            document.getElementById('explanationText').textContent = q.explanation;
             document.getElementById('explanationBox').classList.remove('hidden');
         }
 
         function nextQuestion() {
-            if (currentQuestion < questions.length - 1) { currentQuestion++; loadQuestion(); }
-            else { showResults(); }
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
         }
 
-        function prevQuestion() { if (currentQuestion > 0) { currentQuestion--; loadQuestion(); } }
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
 
         function showResults() {
             document.getElementById('quizContainer').classList.add('hidden');
@@ -290,25 +1018,68 @@
             document.getElementById('finalScore').textContent = `${score}/${questions.length}`;
             document.getElementById('correctCount').textContent = score;
             document.getElementById('wrongCount').textContent = questions.length - score;
+            
+            const percentage = (score / questions.length) * 100;
+            let message = '';
+            let icon = '';
+            
+            if (percentage >= 90) {
+                message = 'Luar biasa! Grammar kamu sudah sangat kuat! 🌟';
+                icon = '🏆';
+                confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+            } else if (percentage >= 70) {
+                message = 'Bagus! Tinggal sedikit lagi untuk sempurna! 👏';
+                icon = '🎉';
+            } else if (percentage >= 50) {
+                message = 'Cukup baik, tapi masih perlu latihan lagi! 💪';
+                icon = '📚';
+            } else {
+                message = 'Jangan menyerah! Yuk latihan lagi dari awal! 🎯';
+                icon = '💡';
+            }
+            
+            document.getElementById('resultMessage').textContent = message;
+            document.getElementById('resultIcon').textContent = icon;
         }
 
-        function restartQuiz() { location.reload(); }
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            answered = new Array(questions.length).fill(false);
+            userAnswers = new Array(questions.length).fill(null);
+            document.getElementById('scoreDisplay').textContent = '0/100';
+            document.getElementById('resultsPage').classList.add('hidden');
+            document.getElementById('landingPage').classList.remove('hidden');
+        }
 
         function showQuestionList() {
             const modal = document.getElementById('questionListModal');
             const grid = document.getElementById('questionGrid');
             grid.innerHTML = '';
+            
             for (let i = 0; i < questions.length; i++) {
                 const btn = document.createElement('button');
-                btn.className = `p-3 rounded-lg font-semibold text-sm ${answered[i] ? 'bg-blue-100 text-blue-700' : 'bg-gray-100'}`;
+                btn.className = `p-3 rounded-lg font-semibold text-sm transition ${answered[i] ? (userAnswers[i] === questions[i].correct ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700') : 'bg-gray-100 text-gray-600 hover:bg-blue-100'}`;
                 btn.textContent = i + 1;
-                btn.onclick = () => { currentQuestion = i; loadQuestion(); closeQuestionList(); };
+                btn.onclick = () => {
+                    currentQuestion = i;
+                    loadQuestion();
+                    closeQuestionList();
+                };
                 grid.appendChild(btn);
             }
+            
             modal.classList.remove('hidden');
         }
 
-        function closeQuestionList() { document.getElementById('questionListModal').classList.add('hidden'); }
+        function closeQuestionList() {
+            document.getElementById('questionListModal').classList.add('hidden');
+        }
+
+        // Close modal on outside click
+        document.getElementById('questionListModal').addEventListener('click', function(e) {
+            if (e.target === this) closeQuestionList();
+        });
     </script>
 </body>
 </html>
