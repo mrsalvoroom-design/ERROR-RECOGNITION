@@ -69,10 +69,6 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .password-input {
-            letter-spacing: 0.5em;
-            text-align: center;
-        }
         .progress-bar {
             background: linear-gradient(90deg, #3b82f6 0%, #ef4444 100%);
         }
@@ -85,30 +81,15 @@
             font-weight: 700;
             color: #1f2937;
         }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body class="text-gray-800">
 
-    <!-- Password Screen -->
-    <div id="passwordScreen" class="fixed inset-0 flex items-center justify-center z-50 bg-gradient-to-br from-white via-blue-50 to-red-50">
-        <div class="glass-panel p-8 rounded-2xl max-w-md w-full mx-4 text-center">
-            <div class="mb-6">
-                <div class="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-red-500 rounded-full flex items-center justify-center mb-4">
-                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                    </svg>
-                </div>
-                <h2 class="text-2xl font-bold gradient-text mb-2">AKSES TERBATAS</h2>
-                <p class="text-gray-600">Masukkan password untuk melanjutkan</p>
-            </div>
-            <input type="password" id="passwordInput" class="password-input w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:outline-none text-lg mb-4" placeholder="••••••••••••••" maxlength="20">
-            <button onclick="checkPassword()" class="btn-primary w-full py-3 rounded-xl text-white font-semibold text-lg">MASUK</button>
-            <p id="passwordError" class="text-red-500 mt-3 hidden">Password salah!</p>
-        </div>
-    </div>
-
-    <!-- Landing Page -->
-    <div id="landingPage" class="hidden min-h-screen flex items-center justify-center p-4">
+    <!-- Landing Page (langsung ditampilkan, tanpa password) -->
+    <div id="landingPage" class="min-h-screen flex items-center justify-center p-4">
         <div class="glass-panel p-8 md:p-12 rounded-3xl max-w-2xl w-full text-center fade-in">
             <div class="mb-8">
                 <div class="inline-block p-4 rounded-full bg-gradient-to-br from-blue-100 to-red-100 mb-6">
@@ -250,28 +231,6 @@
     </div>
 
     <script>
-        // Password protection
-        const CORRECT_PASSWORD = "salvogroupclass";
-        
-        function checkPassword() {
-            const input = document.getElementById('passwordInput').value;
-            if (input === CORRECT_PASSWORD) {
-                document.getElementById('passwordScreen').classList.add('hidden');
-                document.getElementById('landingPage').classList.remove('hidden');
-                document.getElementById('landingPage').classList.add('fade-in');
-            } else {
-                document.getElementById('passwordError').classList.remove('hidden');
-                document.getElementById('passwordInput').classList.add('shake');
-                setTimeout(() => {
-                    document.getElementById('passwordInput').classList.remove('shake');
-                }, 500);
-            }
-        }
-
-        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') checkPassword();
-        });
-
         // Helper function to highlight words in text
         function highlightText(text, wordsToHighlight) {
             let result = text;
